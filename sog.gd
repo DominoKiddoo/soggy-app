@@ -11,11 +11,12 @@ var holding = false
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var overlay: Sprite2D = $overlay
 @onready var swipe: AnimationPlayer = $swipe
+@onready var doubletap: Timer = $doubletap
 
 @onready var imglabel: Label = $Control/imglabel
 var cimage = "soggy.jpg"
 var attemptedImg = ""
-
+var justDoubleTapped = false
 var showingMenu = false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -38,13 +39,22 @@ func _process(delta: float) -> void:
 		spr.scale = spr.scale.lerp(Vector2(0.649, 0.864), delta * 4.0)
 	imglabel.text = "Current Image:\n" + cimage
 	
+	if Input.is_action_just_pressed("press"):
+		if !doubletap.time_left > 0:
+			doubletap.stop()
+			doubletap.wait_time = 0.3
+			doubletap.start()
+		else:
+			print("double tapped!")
+			justDoubleTapped = true
+		
 func changeSog():
 	anim.play("RESET")
 	req.cancel_request()
 	notif.text = "Changing Sog.."
 	notif.show()
 	attemptedImg = images.pick_random()
-	url = "https://mirror.guweh.com/" + images.pick_random()
+	url = "https://mirror.guweh.com/" + attemptedImg
 	url = url.replace(" ", "%20")
 	req.request(url)
 	menu.hide()
@@ -82,19 +92,24 @@ func _req_done(result, response_code, headers, body):
 func _input(event):
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		
 		if event.pressed:
 			holding = true
 			timer.wait_time = 1
 			timer.start()
 		else:
 			timer.stop()
-			var sfx = AudioStreamPlayer.new()
 			holding = false
-			var meows = ["res://meow1.ogg", "res://meow2.ogg", "res://meow3.ogg", "res://meow4.ogg"]
-			sfx.stream = load(meows.pick_random())
-			sfx.finished.connect(sfx.queue_free)
-			add_child(sfx)
-			sfx.play()
+			if !showingMenu:
+				if !justDoubleTapped:
+					var sfx = AudioStreamPlayer.new()
+					var meows = ["res://meow1.ogg", "res://meow2.ogg", "res://meow3.ogg", "res://meow4.ogg"]
+					sfx.stream = load(meows.pick_random())
+					sfx.finished.connect(sfx.queue_free)
+					add_child(sfx)
+					sfx.play()
+				else:
+					justDoubleTapped = false
 
 
 func _on_timer_timeout() -> void:
