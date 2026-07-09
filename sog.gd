@@ -1,0 +1,106 @@
+extends Node2D
+@onready var images = []
+var path = "res://images.txt"
+@onready var req: HTTPRequest = $HTTPRequest
+var url
+@onready var spr: Sprite2D = $Soggycat
+var holding = false
+@onready var timer: Timer = $Timer
+@onready var menu: Control = $Control
+@onready var notif: Label = $notif
+@onready var anim: AnimationPlayer = $AnimationPlayer
+
+var showingMenu = false
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	req.request_completed.connect(_req_done)
+	notif.hide()
+	notif.text = "Changing Sog.."
+	menu.hide()
+	var file = FileAccess.open(path, FileAccess.READ)
+	var content = file.get_file_as_string(path)
+	var json = JSON.new()
+	json.parse(content)
+	images = json.get_data()
+	
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	if holding == true:
+		spr.scale = spr.scale.lerp(Vector2(0.649 * 1.1, 0.864 * 1.1), delta * 4.0)
+	else:
+		spr.scale = spr.scale.lerp(Vector2(0.649, 0.864), delta * 4.0)
+
+func changeSog():
+	anim.play("RESET")
+
+	notif.text = "Changing Sog.."
+	notif.show()
+	url = "https://mirror.guweh.com/" + images.pick_random()
+	url = url.replace(" ", "%20")
+	req.request(url)
+
+func _req_done(result, response_code, headers, body):
+	self.visible = true
+	var img = Image.new()
+	var error
+	var type
+	if "png" in url:
+		error = img.load_png_from_buffer(body)
+	else:
+		error = img.load_jpg_from_buffer(body)
+	
+	if error != OK:
+		notif.text = "There was an error 3:"
+		await get_tree().create_timer(1).timeout
+		anim.play("fade")
+		return
+	
+	anim.play("fade")
+	
+	img.resize(1000, 1333)
+	var tex = ImageTexture.create_from_image(img)
+	var prevsize = spr.texture.get_size() * spr.scale
+	spr.texture = tex
+
+func _input(event):
+	
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			holding = true
+			timer.wait_time = 1
+			timer.start()
+		else:
+			timer.stop()
+			var sfx = AudioStreamPlayer.new()
+			holding = false
+			var meows = ["res://meow1.ogg", "res://meow2.ogg", "res://meow3.ogg", "res://meow4.ogg"]
+			sfx.stream = load(meows.pick_random())
+			sfx.finished.connect(sfx.queue_free)
+			add_child(sfx)
+			sfx.play()
+
+
+func _on_timer_timeout() -> void:
+	if !showingMenu:
+		print("Menu")
+		showingMenu = true
+		menu.show()
+
+
+func _on_new_pressed() -> void:
+	changeSog()
+	menu.hide()
+	showingMenu = false
+	
+
+
+func _on_reset_pressed() -> void:
+	spr.texture = load("res://soggycat.webp")
+	menu.hide()
+	showingMenu = false
+
+
+func _on_close_pressed() -> void:
+	menu.hide()
+	showingMenu = false

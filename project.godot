@@ -1,0 +1,42 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="soggy"
+config/description="get sogged up with the soggy app"
+run/main_scene="uid://beokufu6l12ck"
+config/features=PackedStringArray("4.5", "Mobile")
+boot_splash/fullsize=false
+boot_splash/image="uid://bas0x3mvt7a1g"
+config/icon="uid://bas0x3mvt7a1g"
+config/macos_native_icon="uid://bas0x3mvt7a1g"
+config/windows_native_icon="uid://bas0x3mvt7a1g"
+boot_splash/minimum_display_time=1000
+
+[display]
+
+window/size/viewport_width=648
+window/size/viewport_height=1152
+window/stretch/mode="canvas_items"
+window/stretch/aspect="ignore"
+window/handheld/orientation=6
+
+[input]
+
+meow={
+"deadzone": 0.2,
+"events": []
+}
+
+[rendering]
+
+renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
