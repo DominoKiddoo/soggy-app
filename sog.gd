@@ -9,6 +9,12 @@ var holding = false
 @onready var menu: Control = $Control
 @onready var notif: Label = $notif
 @onready var anim: AnimationPlayer = $AnimationPlayer
+@onready var overlay: Sprite2D = $overlay
+@onready var swipe: AnimationPlayer = $swipe
+
+@onready var imglabel: Label = $Control/imglabel
+var cimage = "soggy.jpg"
+var attemptedImg = ""
 
 var showingMenu = false
 # Called when the node enters the scene tree for the first time.
@@ -30,15 +36,19 @@ func _process(delta: float) -> void:
 		spr.scale = spr.scale.lerp(Vector2(0.649 * 1.1, 0.864 * 1.1), delta * 4.0)
 	else:
 		spr.scale = spr.scale.lerp(Vector2(0.649, 0.864), delta * 4.0)
-
+	imglabel.text = "Current Image:\n" + cimage
+	
 func changeSog():
 	anim.play("RESET")
-
+	req.cancel_request()
 	notif.text = "Changing Sog.."
 	notif.show()
+	attemptedImg = images.pick_random()
 	url = "https://mirror.guweh.com/" + images.pick_random()
 	url = url.replace(" ", "%20")
 	req.request(url)
+	menu.hide()
+	showingMenu = false
 
 func _req_done(result, response_code, headers, body):
 	self.visible = true
@@ -55,14 +65,20 @@ func _req_done(result, response_code, headers, body):
 		await get_tree().create_timer(1).timeout
 		anim.play("fade")
 		return
-	
+	cimage = attemptedImg
+
 	anim.play("fade")
 	
 	img.resize(1000, 1333)
 	var tex = ImageTexture.create_from_image(img)
 	var prevsize = spr.texture.get_size() * spr.scale
+	overlay.texture = tex
+	swipe.play("RESET")
+	swipe.play("swipe")
+	await swipe.animation_finished
 	spr.texture = tex
-
+	swipe.play("RESET")
+	
 func _input(event):
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -96,11 +112,23 @@ func _on_new_pressed() -> void:
 
 
 func _on_reset_pressed() -> void:
-	spr.texture = load("res://soggycat.webp")
+	cimage = "soggy.jpg"
+	attemptedImg = "soggy.jpg"
+
 	menu.hide()
 	showingMenu = false
-
+	overlay.texture = load("res://soggycat.webp")
+	swipe.play("RESET")
+	swipe.play("swipe")
+	await swipe.animation_finished
+	spr.texture = load("res://soggycat.webp")
+	swipe.play("RESET")
 
 func _on_close_pressed() -> void:
 	menu.hide()
 	showingMenu = false
+
+
+func _on_otherclosebutton_pressed() -> void:
+	showingMenu = false
+	menu.hide()

@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://beokufu6l12ck"]
+[gd_scene load_steps=13 format=3 uid="uid://beokufu6l12ck"]
 
 [ext_resource type="Script" uid="uid://dgxlxo38it8b0" path="res://sog.gd" id="1_d0af8"]
 [ext_resource type="Texture2D" uid="uid://cvgurh3yxvie2" path="res://soggycat.webp" id="1_elufd"]
+[ext_resource type="Script" uid="uid://dd37btfy1styb" path="res://swipedetector.gd" id="2_sio4y"]
 
 [sub_resource type="Animation" id="Animation_sio4y"]
 length = 0.001
@@ -56,7 +57,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_d8u2l"]
 resource_name = "menuppop"
-length = 3.0
+length = 5.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -64,10 +65,10 @@ tracks/0/path = NodePath("Label:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1, 2, 3),
+"times": PackedFloat32Array(0, 1, 2.9333334, 3.9333334),
 "transitions": PackedFloat32Array(0.21763714, 0.21763714, 3.732131, 3.732131),
 "update": 0,
-"values": [Vector2(-682, -559), Vector2(-301, -559), Vector2(-301, -559), Vector2(-678, -559)]
+"values": [Vector2(-682, -509), Vector2(-301, -509), Vector2(-301, -509), Vector2(-678, -509)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_l11og"]
@@ -76,15 +77,57 @@ _data = {
 &"menuppop": SubResource("Animation_d8u2l")
 }
 
+[sub_resource type="Animation" id="Animation_l11og"]
+resource_name = "swipe"
+length = 0.41
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("overlay:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.41),
+"transitions": PackedFloat32Array(0.054409362, 0.054409362),
+"update": 0,
+"values": [Vector2(656, 1.375), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_bv7ky"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("overlay:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(656, 1.375)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rv46u"]
+_data = {
+&"RESET": SubResource("Animation_bv7ky"),
+&"swipe": SubResource("Animation_l11og")
+}
+
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_d0af8")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("2_sio4y")
 
 [node name="Soggycat" type="Sprite2D" parent="."]
 position = Vector2(0.75, 1.375)
 scale = Vector2(0.6485, 0.86365336)
 texture = ExtResource("1_elufd")
+
+[node name="overlay" type="Sprite2D" parent="."]
+position = Vector2(656, 1.375)
+scale = Vector2(0.6485, 0.86365336)
 
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 timeout = 5.0
@@ -94,6 +137,14 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="otherclosebutton" type="Button" parent="Control"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = -318.0
+offset_top = -579.0
+offset_right = 326.0
+offset_bottom = 579.0
 
 [node name="new" type="Button" parent="Control"]
 layout_mode = 0
@@ -118,6 +169,61 @@ offset_top = 499.0
 offset_right = 125.0
 offset_bottom = 548.0
 text = "Close Menu"
+
+[node name="lsindicator" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = -295.0
+offset_top = 466.0
+offset_right = -166.0
+offset_bottom = 494.0
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 20
+text = "Or swipe left!"
+
+[node name="rsindicator" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = -155.0
+offset_top = 468.0
+offset_right = -13.0
+offset_bottom = 496.0
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 18
+text = "Or swipe right!"
+
+[node name="dsindicator" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = -10.0
+offset_top = 468.0
+offset_right = 132.0
+offset_bottom = 496.0
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 18
+text = "Or swipe down!"
+
+[node name="rsindicator2" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 31.0
+offset_top = -508.0
+offset_right = 313.0
+offset_bottom = -466.0
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 30
+text = "Soggy App v1.1.0"
+horizontal_alignment = 2
+
+[node name="imglabel" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = -319.0
+offset_top = -204.0
+offset_right = 311.0
+offset_bottom = 9.0
+pivot_offset = Vector2(181, 0)
+theme_override_constants/outline_size = 25
+theme_override_font_sizes/font_size = 50
+text = "Current Image:
+"
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 max_polyphony = 50667
@@ -147,8 +253,8 @@ offset_right = -340.0
 offset_bottom = -472.0
 theme_override_constants/outline_size = 15
 theme_override_font_sizes/font_size = 30
-text = "Hold down for 1 second
-for the menu!"
+text = "Swipe up or hold down 
+to open menu"
 
 [node name="AnimationPlayer2" type="AnimationPlayer" parent="."]
 libraries = {
@@ -156,6 +262,12 @@ libraries = {
 }
 autoplay = "menuppop"
 
+[node name="swipe" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_rv46u")
+}
+
+[connection signal="pressed" from="Control/otherclosebutton" to="." method="_on_otherclosebutton_pressed"]
 [connection signal="pressed" from="Control/new" to="." method="_on_new_pressed"]
 [connection signal="pressed" from="Control/reset" to="." method="_on_reset_pressed"]
 [connection signal="pressed" from="Control/close" to="." method="_on_close_pressed"]
