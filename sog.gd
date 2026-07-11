@@ -12,12 +12,21 @@ var holding = false
 @onready var overlay: Sprite2D = $overlay
 @onready var swipe: AnimationPlayer = $swipe
 @onready var doubletap: Timer = $doubletap
+const SAVE_PATH := "user://liked.json"
+@onready var unlike: Button = $Control/unlike
 
 @onready var imglabel: Label = $Control/imglabel
+
+
+
 var cimage = "soggy.jpg"
 var attemptedImg = ""
 var justDoubleTapped = false
 var showingMenu = false
+@onready var heart: Sprite2D = $heart
+
+var swipes = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	req.request_completed.connect(_req_done)
@@ -26,7 +35,9 @@ func _ready() -> void:
 	menu.hide()
 	var file = FileAccess.open(path, FileAccess.READ)
 	var content = file.get_file_as_string(path)
+	file.close()
 	var json = JSON.new()
+	
 	json.parse(content)
 	images = json.get_data()
 	
@@ -44,10 +55,17 @@ func _process(delta: float) -> void:
 			doubletap.stop()
 			doubletap.wait_time = 0.3
 			doubletap.start()
-		else:
-			print("double tapped!")
+		elif swipes == 0:
+			
+			heart.like(get_global_mouse_position(), cimage)
 			justDoubleTapped = true
-		
+	
+	if showingMenu:
+		var liked: Array = get_liked()
+		if liked.has(cimage):
+			unlike.show()
+		else:
+			unlike.hide()
 func changeSog():
 	anim.play("RESET")
 	req.cancel_request()
@@ -73,10 +91,11 @@ func _req_done(result, response_code, headers, body):
 	if error != OK:
 		notif.text = "There was an error 3:"
 		await get_tree().create_timer(1).timeout
+		anim.stop()
 		anim.play("fade")
 		return
 	cimage = attemptedImg
-
+	anim.stop()
 	anim.play("fade")
 	
 	img.resize(1000, 1333)
@@ -92,7 +111,6 @@ func _req_done(result, response_code, headers, body):
 func _input(event):
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		
 		if event.pressed:
 			holding = true
 			timer.wait_time = 1
@@ -147,3 +165,35 @@ func _on_close_pressed() -> void:
 func _on_otherclosebutton_pressed() -> void:
 	showingMenu = false
 	menu.hide()
+
+
+func get_liked():
+	var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
+	if file:
+		var string = file.get_as_text()
+		file.close()
+		var json = JSON.new()
+		var error = json.parse(string)
+		if error == OK:
+			return(json.get_data())
+
+func save_liked(array: Array):
+	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	if file:
+		var jstring = JSON.stringify(array)
+		file.store_string(jstring)
+		file.close()
+	
+
+
+func _on_unlike_pressed() -> void:
+	var liked: Array = get_liked()
+	liked.remove_at(liked.find(cimage))
+	print(liked)
+	save_liked(liked)
+	showingMenu = false
+	menu.hide()
+
+
+func _on_vlikes_pressed() -> void:
+	get_tree().change_scene_to_file("res://likes.tscn")

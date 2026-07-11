@@ -1,8 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://beokufu6l12ck"]
+[gd_scene load_steps=15 format=3 uid="uid://beokufu6l12ck"]
 
 [ext_resource type="Script" uid="uid://dgxlxo38it8b0" path="res://sog.gd" id="1_d0af8"]
 [ext_resource type="Texture2D" uid="uid://cvgurh3yxvie2" path="res://soggycat.webp" id="1_elufd"]
+[ext_resource type="PackedScene" uid="uid://dql6vtl7kfhit" path="res://heart.tscn" id="2_d8u2l"]
 [ext_resource type="Script" uid="uid://dd37btfy1styb" path="res://swipedetector.gd" id="2_sio4y"]
+[ext_resource type="Script" uid="uid://iw3fkdramggr" path="res://checkversion.gd" id="5_mw56d"]
 
 [sub_resource type="Animation" id="Animation_sio4y"]
 length = 0.001
@@ -129,6 +131,8 @@ texture = ExtResource("1_elufd")
 position = Vector2(656, 1.375)
 scale = Vector2(0.6485, 0.86365336)
 
+[node name="heart" parent="." instance=ExtResource("2_d8u2l")]
+
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 timeout = 5.0
 
@@ -225,6 +229,24 @@ text = "Current Image:
 horizontal_alignment = 1
 autowrap_mode = 3
 
+[node name="unlike" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 246.0
+offset_top = 438.0
+offset_right = 306.0
+offset_bottom = 548.0
+text = "Unlike
+Post"
+
+[node name="vlikes" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = -309.0
+offset_top = -503.0
+offset_right = -47.0
+offset_bottom = -412.0
+theme_override_font_sizes/font_size = 50
+text = "View Likes"
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 max_polyphony = 50667
 
@@ -233,13 +255,13 @@ one_shot = true
 
 [node name="notif" type="Label" parent="."]
 offset_left = -316.0
-offset_top = -43.0
+offset_top = -197.0
 offset_right = 317.0
-offset_bottom = 26.0
+offset_bottom = 223.0
 theme_override_constants/outline_size = 15
 theme_override_font_sizes/font_size = 50
-text = "Changing Sog.."
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -271,8 +293,43 @@ libraries = {
 wait_time = 0.3
 one_shot = true
 
+[node name="verchecker" type="HTTPRequest" parent="."]
+script = ExtResource("5_mw56d")
+
+[node name="outadtaed" type="ColorRect" parent="."]
+visible = false
+offset_left = -419.0
+offset_top = 217.0
+offset_right = 437.0
+offset_bottom = 375.0
+color = Color(1, 1, 0, 1)
+
+[node name="Label" type="Label" parent="outadtaed"]
+layout_mode = 0
+offset_left = 76.0
+offset_top = 10.0
+offset_right = 754.0
+offset_bottom = 97.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "YOUR SOGGY APP IS OUTDATED! 
+GO TO THE GITHUB TO UPDATE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="outadtaed"]
+layout_mode = 0
+offset_left = 310.0
+offset_top = 98.0
+offset_right = 498.0
+offset_bottom = 149.0
+text = "GO TO GITHUB!"
+
 [connection signal="pressed" from="Control/otherclosebutton" to="." method="_on_otherclosebutton_pressed"]
 [connection signal="pressed" from="Control/new" to="." method="_on_new_pressed"]
 [connection signal="pressed" from="Control/reset" to="." method="_on_reset_pressed"]
 [connection signal="pressed" from="Control/close" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="Control/unlike" to="." method="_on_unlike_pressed"]
+[connection signal="pressed" from="Control/vlikes" to="." method="_on_vlikes_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="pressed" from="outadtaed/Button" to="verchecker" method="_on_button_pressed"]

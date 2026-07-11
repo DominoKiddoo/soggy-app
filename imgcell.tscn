@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://2e1dfp2mkpo6"]
+
+[ext_resource type="Texture2D" uid="uid://cs3qxpetas2gj" path="res://Loading.png" id="1_h15ck"]
+[ext_resource type="Script" uid="uid://dg6f68xtw7uy5" path="res://imgcell.gd" id="2_h15ck"]
+
+[node name="imgcell" type="TextureRect"]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_h15ck")
+script = ExtResource("2_h15ck")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+timeout = 10.0
+
+[node name="Button" type="Button" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 199.99998
+offset_bottom = 264.99997
+mouse_filter = 1
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

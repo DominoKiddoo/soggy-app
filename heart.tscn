@@ -1,34 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dql6vtl7kfhit"]
+[gd_scene load_steps=7 format=3 uid="uid://dql6vtl7kfhit"]
 
 [ext_resource type="Texture2D" uid="uid://dkorxw6322wti" path="res://heart.png" id="1_cixvg"]
-
-[sub_resource type="Animation" id="Animation_cixvg"]
-resource_name = "like"
-length = 3.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1.64),
-"transitions": PackedFloat32Array(0.18946461, 5.656854, 5.656854),
-"update": 0,
-"values": [Vector2(1e-05, 1e-05), Vector2(0.3, 0.3), Vector2(1e-05, 1e-05)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(-0.33333337, 2.4333334),
-"transitions": PackedFloat32Array(-2.6390157, -2.6390157),
-"update": 0,
-"values": [0.0, 18.84955592153876]
-}
+[ext_resource type="Script" uid="uid://cvyw1royx4myg" path="res://like.gd" id="2_7p8dj"]
+[ext_resource type="AudioStream" uid="uid://bux2v2pxhptc" path="res://like.wav" id="3_pembh"]
 
 [sub_resource type="Animation" id="Animation_7p8dj"]
 length = 0.001
@@ -57,6 +31,34 @@ tracks/1/keys = {
 "values": [0.0]
 }
 
+[sub_resource type="Animation" id="Animation_cixvg"]
+resource_name = "like"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4, 1.5),
+"transitions": PackedFloat32Array(0.18946461, 5, 5.656854),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05), Vector2(0.3, 0.3), Vector2(1e-05, 1e-05)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(0.20306297, -0.45),
+"update": 0,
+"values": [-3.490658503988659, 6.283185307179586]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7p8dj"]
 _data = {
 &"RESET": SubResource("Animation_7p8dj"),
@@ -66,9 +68,13 @@ _data = {
 [node name="heart" type="Sprite2D"]
 scale = Vector2(1e-05, 1e-05)
 texture = ExtResource("1_cixvg")
+script = ExtResource("2_7p8dj")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_7p8dj")
 }
-autoplay = "like"
+speed_scale = 2.0
+
+[node name="sfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_pembh")
