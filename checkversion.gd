@@ -4,7 +4,7 @@ extends HTTPRequest
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	request_completed.connect(_req_done)
-	request("https://raw.githubusercontent.com/DominoKiddoo/soggy-app/refs/heads/master/version.txt")
+	request("https://raw.githubusercontent.com/DominoKiddoo/soggy-app/refs/heads/master/version.txt?t=" + str(Time.get_unix_time_from_system()))
 
 @onready var outdated: ColorRect = $"../outadtaed"
 
