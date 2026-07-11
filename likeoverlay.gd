@@ -15,10 +15,12 @@ func _ready() -> void:
 
 
 func doOverlay(tex: Texture, name: String):
-	overlayShowing = true
 	texture = tex
 	imgName = name
 	anim.play("down")
+	await get_tree().create_timer(1).timeout
+	overlayShowing = true
+
 
 
 func _on_unlike_pressed() -> void:
