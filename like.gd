@@ -34,7 +34,7 @@ func like(pos: Vector2, str: String):
 		notif.show()
 		anim2.stop()
 		anim2.play("fade")
-		anim2.animation_finished.connect(notif.hide)
+		anim2.animation_finished.connect(notif.hide, CONNECT_ONE_SHOT)
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if file:
 		var jstring = JSON.stringify(likedArray)
