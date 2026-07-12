@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://oi8afx8wok78"]
+[gd_scene load_steps=9 format=3 uid="uid://oi8afx8wok78"]
 
 [ext_resource type="Script" uid="uid://d0jb1ww7k45ns" path="res://likemenu.gd" id="1_l6joi"]
 [ext_resource type="Texture2D" uid="uid://c7n2skwort5o8" path="res://Error.png" id="2_g8eig"]
 [ext_resource type="Script" uid="uid://b8cxa0y5f6yhv" path="res://likeoverlay.gd" id="3_g8eig"]
+[ext_resource type="Texture2D" uid="uid://bnlnq15gb2c8f" path="res://soog.jpg" id="4_fkomj"]
 
 [sub_resource type="Animation" id="Animation_fkomj"]
 length = 0.001
@@ -79,6 +80,7 @@ offset_top = -425.0
 offset_right = 328.0
 offset_bottom = 569.0
 mouse_filter = 0
+scroll_deadzone = 20
 
 [node name="GridContainer" type="GridContainer" parent="cells/ScrollContainer"]
 layout_mode = 2
@@ -127,6 +129,23 @@ root_node = NodePath("../..")
 libraries = {
 &"": SubResource("AnimationLibrary_g8eig")
 }
+
+[node name="carname" type="Label" parent="overlay"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 14.0
+offset_right = 648.0
+offset_bottom = 83.0
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 50
+text = "Insert cat name :3c"
+autowrap_mode = 3
+
+[node name="Soog" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(1.9999905, 80)
+scale = Vector2(1.304, 1.988)
+texture = ExtResource("4_fkomj")
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="overlay/Unlike" to="overlay" method="_on_unlike_pressed"]

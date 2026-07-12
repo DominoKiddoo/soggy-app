@@ -3,6 +3,7 @@ const SAVE_PATH := "user://liked.json"
 var pos = Vector2()
 @onready var startingpos: Node2D = $cells/startingpos
 var liked = []
+@onready var soog: Sprite2D = $Soog
 
 @onready var overlay: TextureRect = $overlay
 @onready var grid_container: GridContainer = $cells/ScrollContainer/GridContainer
@@ -10,6 +11,8 @@ var liked = []
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	createGrid()
+	if len(get_liked()) == 0:
+		soog.show()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

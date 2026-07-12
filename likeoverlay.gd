@@ -5,6 +5,7 @@ var imgName
 @onready var main: Node2D = $".."
 var overlayShowing = false
 const SAVE_PATH := "user://liked.json"
+@onready var carname: Label = $carname
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -17,6 +18,8 @@ func _ready() -> void:
 func doOverlay(tex: Texture, name: String):
 	texture = tex
 	imgName = name
+	carname.text = imgName
+
 	anim.play("down")
 	await get_tree().create_timer(1).timeout
 	overlayShowing = true
@@ -98,6 +101,3 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_released("press"):
 		swiping = false
 		didswipe = false
-		if overlayShowing:
-			overlayShowing = false;
-			anim.play("exit")

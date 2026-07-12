@@ -39,11 +39,13 @@ func _req_done(result, response_code, headers, body):
 	
 	button.show()
 	
-	img.resize(200, 266)
-	var tex = ImageTexture.create_from_image(img)
+	globalTex = ImageTexture.create_from_image(img)
+	
+	var resizedImg = img.duplicate()
+	resizedImg.resize(200, 266)
+	
+	var tex = ImageTexture.create_from_image(resizedImg)
 	self.texture = tex
-	globalTex = tex
-
 
 func _on_button_pressed() -> void:
 	var lastslash = globalUrl.rfind("/")
