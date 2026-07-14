@@ -133,20 +133,80 @@ libraries = {
 [node name="carname" type="Label" parent="overlay"]
 layout_mode = 0
 offset_left = 6.0
-offset_top = 14.0
+offset_top = 86.0
 offset_right = 648.0
-offset_bottom = 83.0
+offset_bottom = 155.0
 theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 50
 text = "Insert cat name :3c"
 autowrap_mode = 3
 
 [node name="Soog" type="Sprite2D" parent="."]
-visible = false
 position = Vector2(1.9999905, 80)
 scale = Vector2(1.304, 1.988)
 texture = ExtResource("4_fkomj")
 
+[node name="clear" type="Button" parent="."]
+offset_left = 117.0
+offset_top = -497.0
+offset_right = 166.0
+offset_bottom = -431.0
+text = "Clear"
+
+[node name="refresh" type="Button" parent="."]
+offset_left = 42.0
+offset_top = -497.0
+offset_right = 110.0
+offset_bottom = -431.0
+text = "Refresh"
+
+[node name="popup" type="Control" parent="."]
+visible = false
+z_index = 10
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="popup"]
+layout_mode = 0
+offset_left = -308.0
+offset_top = -71.0
+offset_right = 303.0
+offset_bottom = 159.0
+color = Color(1, 0, 0, 1)
+
+[node name="Label" type="Label" parent="popup"]
+layout_mode = 0
+offset_left = -289.0
+offset_top = -55.0
+offset_right = 318.0
+offset_bottom = 86.0
+theme_override_font_sizes/font_size = 40
+text = "ARE YOU SURE YOU WANT TO CLEAR LIKES?"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="yes" type="Button" parent="popup"]
+layout_mode = 0
+offset_left = -297.0
+offset_top = 60.0
+offset_right = -206.0
+offset_bottom = 146.0
+text = "Yes"
+
+[node name="no" type="Button" parent="popup"]
+layout_mode = 0
+offset_left = -199.0
+offset_top = 60.0
+offset_right = 294.0
+offset_bottom = 146.0
+text = "NO"
+
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="overlay/Unlike" to="overlay" method="_on_unlike_pressed"]
 [connection signal="pressed" from="overlay/Close" to="overlay" method="_on_close_pressed"]
+[connection signal="pressed" from="clear" to="." method="_on_clear_pressed"]
+[connection signal="pressed" from="refresh" to="." method="_on_refresh_pressed"]
+[connection signal="pressed" from="popup/yes" to="." method="_on_yes_pressed"]
+[connection signal="pressed" from="popup/no" to="." method="_on_no_pressed"]

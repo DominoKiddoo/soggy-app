@@ -7,12 +7,11 @@ var liked = []
 
 @onready var overlay: TextureRect = $overlay
 @onready var grid_container: GridContainer = $cells/ScrollContainer/GridContainer
+@onready var popup: Control = $popup
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	createGrid()
-	if len(get_liked()) == 0:
-		soog.show()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -44,6 +43,10 @@ func _oncelloverlay(tex: Texture, img_name: String):
 		overlay.doOverlay(tex, img_name)
 
 func createGrid():
+	if len(get_liked()) == 0:
+		soog.show()
+	else:
+		soog.hide()
 	for n in grid_container.get_children(): # stolen from reddit lmao
 		grid_container.remove_child(n)
 		n.queue_free()
@@ -57,3 +60,22 @@ func createGrid():
 		url = url.replace(" ", "%20")
 		cell.initWithImage(url)
 		cell.reqoverlay.connect(_oncelloverlay)
+
+
+func _on_clear_pressed() -> void:
+	popup.show()
+
+
+func _on_yes_pressed() -> void:
+	var blank = []
+	save_liked(blank)
+	popup.hide()
+	createGrid()
+
+
+func _on_no_pressed() -> void:
+	popup.hide()
+
+
+func _on_refresh_pressed() -> void:
+	createGrid()

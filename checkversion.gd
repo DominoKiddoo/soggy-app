@@ -13,6 +13,10 @@ func _process(delta: float) -> void:
 	pass
 
 func _req_done(result, response_code, headers, body):
+	
+	if result != HTTPRequest.RESULT_SUCCESS:
+		return
+	
 	var latestVer = body.get_string_from_utf8().strip_edges()
 	print(latestVer)
 	

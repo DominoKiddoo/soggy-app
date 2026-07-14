@@ -4,6 +4,7 @@ var path = "res://images.txt"
 @onready var req: HTTPRequest = $HTTPRequest
 var url
 @onready var spr: Sprite2D = $Soggycat
+@onready var verlabel: Label = $Control/rsindicator2
 var holding = false
 @onready var timer: Timer = $Timer
 @onready var menu: Control = $Control
@@ -29,6 +30,10 @@ var swipes = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	var ver = FileAccess.open("res://version.txt", FileAccess.READ)
+	var localVer = ver.get_file_as_string("res://version.txt").strip_edges()
+	ver.close()
+	verlabel.text = "Soggy App v"+localVer
 	req.request_completed.connect(_req_done)
 	notif.hide()
 	notif.text = "Changing Sog.."

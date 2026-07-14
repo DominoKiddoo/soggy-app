@@ -1,7 +1,7 @@
 extends TextureRect
 @onready var button: Button = $Button
 @onready var overlay: TextureRect = $overlay
-
+var tries = 0
 @onready var req: HTTPRequest = $HTTPRequest
 var globalTex
 var globalUrl
@@ -33,8 +33,12 @@ func _req_done(result, response_code, headers, body):
 		error = img.load_jpg_from_buffer(body)
 	
 	if error != OK:
+		tries += 1
 		print("error")
-		self.texture = load("res://Error.png")
+		if tries >= 5:
+			self.texture = load("res://Error.png")
+		else:
+			req.request(globalUrl)
 		return
 	
 	button.show()
